@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>终焉备案 - zbx.com</title>
+    <style>
+        :root{--b:#000;--w:#fff;--r1:#f00;--r2:#c00;--r3:#900}
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:monospace;background:var(--b);color:var(--r1);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+        .scanline{position:fixed;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,transparent,var(--r1),transparent);opacity:0.1;animation:scan 8s linear infinite;pointer-events:none}
+        .noise{position:fixed;top:0;left:0;width:200%;height:200%;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");animation:noise 0.2s infinite;pointer-events:none}
+        .container{max-width:600px;width:100%;border:1px solid var(--r1);padding:30px;position:relative;z-index:10;background:rgba(0,0,0,0.8)}
+        h1{font-size:1.8rem;margin-bottom:20px;text-align:center;text-transform:uppercase;letter-spacing:2px;position:relative}
+        h1::after{content:'';position:absolute;bottom:-10px;left:50%;transform:translateX(-50%);width:100px;height:1px;background:var(--r1)}
+        .icp-num{font-size:1.3rem;color:var(--r1);text-align:center;margin:25px 0;padding:15px;border:1px solid var(--r1);background:rgba(255,0,0,0.05)}
+        .info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:15px;margin:25px 0}
+        .info-item{padding:12px;border:1px solid var(--r3)}
+        .label{font-size:0.8rem;color:var(--r3);margin-bottom:5px;text-transform:uppercase}
+        .value{font-size:1rem;color:var(--r1);word-break:break-all}
+        .footer{margin-top:30px;padding-top:20px;border-top:1px solid var(--r3);text-align:center;font-size:0.8rem;color:var(--r3)}
+        .back-link{display:inline-block;margin-top:15px;color:var(--r1);text-decoration:none;border:1px solid var(--r1);padding:8px 20px;transition:all 0.3s}
+        .back-link:hover{background:var(--r1);color:var(--b)}
+        @keyframes scan{0%{transform:translateY(-100px)}100%{transform:translateY(100vh)}}
+        @keyframes noise{0%{transform:translate(0,0)}100%{transform:translate(-100px,-100px)}}
+        .shake{animation:shake 0.5s}
+        @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-1px)}75%{transform:translateX(1px)}}
+        @media(max-width:600px){.container{padding:20px}h1{font-size:1.5rem}.info-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="scanline"></div>
+    
+    <div class="container">
+        <h1>终焉备案 - zbx.com</h1>
+        
+        <div class="icp-num">终ICP备E86698A5号</div>
+        
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">域名</div>
+                <div class="value">zbx.com</div>
+            </div>
+            <div class="info-item">
+                <div class="label">用途</div>
+                <div class="value">个人网站</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="label">备案实体</div>
+                <div class="value">sbzbz</div>
+            </div>
+            
+            <div class="info-item">
+                <div class="label">备案时间</div>
+                <div class="value">2026/1/25下午6:32:22</div>
+            </div>
+        </div>
+        
+        
+        
+        <div class="footer">
+            <p>终焉备案系统 | 20260125-183222-285</p>
+            <a href="https://yingo-server.github.io/ICP-yingo/" class="back-link">返回系统</a>
+        </div>
+    </div>
+    
+    
+    <script>
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const elements = document.querySelectorAll('.icp-num, .value, h1');
+                if (elements.length > 0) {
+                    const randomElement = elements[Math.floor(Math.random() * elements.length)];
+                    randomElement.classList.add('shake');
+                    setTimeout(() => randomElement.classList.remove('shake'), 500);
+                }
+            }
+        }, 3000);
+        
+        document.querySelectorAll('.info-item').forEach(item => {
+            item.addEventListener('mouseenter', () => item.style.borderColor = 'var(--r1)');
+            item.addEventListener('mouseleave', () => item.style.borderColor = 'var(--r3)');
+        });
+        
+        document.querySelector('.icp-num').addEventListener('click', function() {
+            this.style.transform = 'scale(1.05)';
+            setTimeout(() => this.style.transform = 'scale(1)', 200);
+        });
+    </script>
+    
+</body>
+</html>
