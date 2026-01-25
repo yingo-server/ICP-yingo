@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>终焉相位</title>
+    <style>
+        :root {
+            --phase-black: #000000;
+            --phase-white: #ffffff;
+            --phase-gray: #1a1a1a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: var(--phase-black);
+            color: var(--phase-white);
+            min-height: 100vh;
+            overflow: hidden;
+            cursor: crosshair;
+        }
+        
+        .phase-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        
+        .phase-line {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 1px;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                var(--phase-white) 15%,
+                var(--phase-white) 85%,
+                transparent 100%
+            );
+            opacity: 0;
+        }
+        
+        .phase-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--phase-white);
+            opacity: 0;
+        }
+        
+        .phase-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            opacity: 0;
+            white-space: nowrap;
+        }
+        
+        .terminal-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes expandCircle {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0.5;
+            }
+            100% {
+                width: 200vmax;
+                height: 200vmax;
+                opacity: 0;
+            }
+        }
+        
+        @keyframes scanline {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes terminalFade {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal-grid"></div>
+    
+    <div class="phase-container" id="phaseContainer">
+        <div class="phase-center" id="phaseCenter"></div>
+        <div class="phase-text" id="phaseText">相位同步中</div>
+    </div>
+
+    <script>
+        // 配置
+        const TARGET_URL = 'https://icp-yingo.netlify.app/';
+        const PHASE_TIME = 3000; // 3秒
+        
+        // 元素
+        const container = document.getElementById('phaseContainer');
+        const center = document.getElementById('phaseCenter');
+        const text = document.getElementById('phaseText');
+        
+        // 初始化
+        function init() {
+            createPhaseLines();
+            startPhaseAnimation();
+            
+            // 3秒后跳转
+            setTimeout(() => {
+                window.location.href = TARGET_URL;
+            }, PHASE_TIME);
+        }
+        
+        // 创建相位线
+        function createPhaseLines() {
+            const lineCount = 11; // 奇数确保中心线存在
+            
+            for (let i = 0; i < lineCount; i++) {
+                const line = document.createElement('div');
+                line.className = 'phase-line';
+                
+                // 计算位置
+                const position = i / (lineCount - 1);
+                line.style.left = `${position * 100}%`;
+                
+                // 计算延迟和持续时间
+                const centerDistance = Math.abs(position - 0.5);
+                const delay = centerDistance * 1000;
+                const duration = 1500 - (centerDistance * 500);
+                
+                // 设置动画
+                line.style.animation = `
+                    fadeInOut ${duration}ms ease-in-out ${delay}ms forwards,
+                    scanline ${duration}ms linear ${delay}ms forwards
+                `;
+                
+                container.appendChild(line);
+            }
+        }
+        
+        // 开始相位动画
+        function startPhaseAnimation() {
+            // 中心圆圈动画
+            center.style.animation = `expandCircle ${PHASE_TIME}ms ease-in-out forwards`;
+            
+            // 文字动画
+            const texts = ['相位同步中', '坐标校准', '时空稳定', '传送准备'];
+            let textIndex = 0;
+            
+            text.style.animation = `terminalFade 750ms ease-in-out forwards`;
+            
+            // 文字循环
+            const textInterval = setInterval(() => {
+                text.style.opacity = '0';
+                
+                setTimeout(() => {
+                    textIndex = (textIndex + 1) % texts.length;
+                    text.textContent = texts[textIndex];
+                    text.style.opacity = '1';
+                }, 250);
+            }, 750);
+            
+            // 清理计时器
+            setTimeout(() => {
+                clearInterval(textInterval);
+            }, PHASE_TIME - 750);
+            
+            // 添加噪点效果
+            createNoiseEffect();
+            
+            // 添加轻微闪烁
+            createFlickerEffect();
+        }
+        
+        // 创建噪点效果
+        function createNoiseEffect() {
+            const noiseCanvas = document.createElement('canvas');
+            noiseCanvas.style.position = 'fixed';
+            noiseCanvas.style.top = '0';
+            noiseCanvas.style.left = '0';
+            noiseCanvas.style.width = '100%';
+            noiseCanvas.style.height = '100%';
+            noiseCanvas.style.pointerEvents = 'none';
+            noiseCanvas.style.zIndex = '999';
+            noiseCanvas.style.opacity = '0.03';
+            
+            document.body.appendChild(noiseCanvas);
+            
+            const ctx = noiseCanvas.getContext('2d');
+            noiseCanvas.width = window.innerWidth;
+            noiseCanvas.height = window.innerHeight;
+            
+            // 绘制噪点
+            function drawNoise() {
+                const imageData = ctx.createImageData(noiseCanvas.width, noiseCanvas.height);
+                const data = imageData.data;
+                
+                for (let i = 0; i < data.length; i += 4) {
+                    const value = Math.random() * 255;
+                    data[i] = value;     // R
+                    data[i + 1] = value; // G
+                    data[i + 2] = value; // B
+                    data[i + 3] = 10;    // A
+                }
+                
+                ctx.putImageData(imageData, 0, 0);
+            }
+            
+            // 动画循环
+            function animateNoise() {
+                drawNoise();
+                requestAnimationFrame(animateNoise);
+            }
+            
+            animateNoise();
+            
+            // 窗口大小调整
+            window.addEventListener('resize', () => {
+                noiseCanvas.width = window.innerWidth;
+                noiseCanvas.height = window.innerHeight;
+            });
+        }
+        
+        // 创建闪烁效果
+        function createFlickerEffect() {
+            let lastFlicker = 0;
+            
+            function flicker() {
+                const now = Date.now();
+                if (now - lastFlicker > 100) {
+                    lastFlicker = now;
+                    
+                    // 随机轻微闪烁
+                    if (Math.random() > 0.7) {
+                        document.body.style.backgroundColor = Math.random() > 0.5 ? 
+                            'rgba(255, 255, 255, 0.02)' : 
+                            'rgba(0, 0, 0, 0.02)';
+                        
+                        setTimeout(() => {
+                            document.body.style.backgroundColor = '';
+                        }, 16);
+                    }
+                }
+                
+                requestAnimationFrame(flicker);
+            }
+            
+            flicker();
+        }
+        
+        // 开始
+        document.addEventListener('DOMContentLoaded', init);
+        
+        // 点击加速跳转（可选）
+        document.addEventListener('click', () => {
+            if (confirm('是否立即跳转？')) {
+                window.location.href = TARGET_URL;
+            }
+        });
+    </script>
+</body>
+</html>
