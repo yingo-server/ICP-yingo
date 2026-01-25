@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>终焉备案 | 双相系统</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏸</text></svg>">
+    <meta name="description" content="终焉备案系统 - 双相风格的虚拟备案工具">
+</head>
+<body class="phase-white">
+    <!-- 扫描线效果 -->
+    <div class="scanlines"></div>
+    
+    <!-- 噪点效果 -->
+    <div class="noise"></div>
+    
+    <!-- 状态指示器 -->
+    <div class="status-indicator red-text-3">
+        <span id="phaseStatus">相位: 白</span>
+    </div>
+    
+    <!-- 点击提示 -->
+    <div class="click-hint red-text-4">
+        点击切换相位
+    </div>
+    
+    <!-- 音频控制 -->
+    <div class="audio-controls">
+        <button class="music-toggle red-text-2" id="musicToggle">♪</button>
+    </div>
+    
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 头部 -->
+        <header class="header">
+            <h1 class="red-text-1">
+                <span class="shake">终焉备案系统</span>
+            </h1>
+            <p class="subtitle red-text-3">双相接口 • 红白黑 • 点击切换相位</p>
+        </header>
+        
+        <!-- 导航 -->
+        <nav class="nav">
+            <button class="nav-button red-text-2 active" data-view="home">
+                首页
+            </button>
+            <button class="nav-button red-text-3" data-view="register">
+                注册
+            </button>
+            <button class="nav-button red-text-4" data-view="search">
+                搜索
+            </button>
+        </nav>
+        
+        <!-- 内容区域 -->
+        <main class="content">
+            <!-- 首页 -->
+            <section id="homeSection" class="content-section active">
+                <div class="red-text-2" style="margin-bottom: 30px;">
+                    <h2 style="margin-bottom: 10px; font-size: 1.5rem;">系统状态</h2>
+                    <p style="margin-bottom: 15px; line-height: 1.5;">
+                        双相模式已激活。当前相位：<span id="currentPhase" class="red-text-1">白</span>
+                    </p>
+                    <p style="line-height: 1.5;">
+                        系统运行正常。备案记录总数：<span id="recordCount" class="red-text-1">加载中...</span>
+                    </p>
+                </div>
+                
+                <div class="red-text-3" style="margin-bottom: 30px; border: 1px solid currentColor; padding: 15px;">
+                    <h3 style="margin-bottom: 10px; font-size: 1.2rem;">使用说明</h3>
+                    <ul style="list-style: none; line-height: 1.8;">
+                        <li>• 点击屏幕任意位置切换黑白相位</li>
+                        <li>• 文字颜色为红色系，不同深浅代表不同层级</li>
+                        <li>• 文字会随机抖动，这是正常现象</li>
+                        <li>• 背景音乐为简单电子音，可点击右下角按钮控制</li>
+                        <li>• 注册备案信息会生成唯一页面</li>
+                        <li>• 搜索功能支持模糊查找</li>
+                    </ul>
+                </div>
+                
+                <div class="red-text-4">
+                    <p style="font-size: 0.8rem; line-height: 1.4;">
+                        警告：此系统为虚拟工具。所有数据保存于公开仓库。<br>
+                        终焉已至，数字崩溃不可避免。
+                    </p>
+                </div>
+            </section>
+            
+            <!-- 注册页面 -->
+            <section id="registerSection" class="content-section">
+                <div class="form-container">
+                    <h2 class="red-text-1" style="margin-bottom: 20px; font-size: 1.5rem;">
+                        注册终焉备案
+                    </h2>
+                    
+                    <form id="icpForm">
+                        <div class="form-group">
+                            <label class="form-label red-text-3" for="domain">域名 *</label>
+                            <input type="text" id="domain" name="domain" class="form-input red-text-2" required
+                                   placeholder="example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label red-text-3" for="purpose">用途 *</label>
+                            <select id="purpose" name="purpose" class="form-input red-text-2" required>
+                                <option value="" class="red-text-4">选择用途</option>
+                                <option value="个人网站" class="red-text-4">个人网站</option>
+                                <option value="企业官网" class="red-text-4">企业官网</option>
+                                <option value="电商平台" class="red-text-4">电商平台</option>
+                                <option value="博客" class="red-text-4">博客</option>
+                                <option value="在线服务" class="red-text-4">在线服务</option>
+                                <option value="其他" class="red-text-4">其他</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label red-text-3" for="company">公司/个人</label>
+                            <input type="text" id="company" name="company" class="form-input red-text-2"
+                                   placeholder="可选">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label red-text-3" for="contact">联系方式</label>
+                            <input type="text" id="contact" name="contact" class="form-input red-text-2"
+                                   placeholder="可选">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label red-text-3" for="description">描述</label>
+                            <textarea id="description" name="description" class="form-input red-text-2"
+                                      placeholder="网站简要描述..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-button red-text-1">
+                            <span>生成备案</span>
+                        </button>
+                    </form>
+                    
+                    <!-- 结果容器 -->
+                    <div id="resultContainer" style="display: none; margin-top: 30px;">
+                        <div class="message success red-text-3">
+                            <h3 style="margin-bottom: 5px;">备案生成成功</h3>
+                            <p>备案信息已保存到GitHub仓库</p>
+                        </div>
+                        
+                        <div style="margin: 20px 0;">
+                            <h4 class="red-text-2" style="margin-bottom: 10px; font-size: 1.1rem;">页脚代码</h4>
+                            <div class="code-block">
+                                <pre class="red-text-1" id="icpCode"></pre>
+                                <button class="copy-button red-text-3">复制</button>
+                            </div>
+                            <p class="red-text-4" style="margin-top: 10px; font-size: 0.8rem;">
+                                将此代码添加到网站页脚即可显示备案信息
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="red-text-2" style="margin-bottom: 10px; font-size: 1.1rem;">备案详情</h4>
+                            <div id="icpDetails"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 搜索页面 -->
+            <section id="searchSection" class="content-section">
+                <div class="search-container">
+                    <h2 class="red-text-1" style="margin-bottom: 20px; font-size: 1.5rem;">
+                        搜索终焉备案
+                    </h2>
+                    
+                    <form id="searchForm">
+                        <div class="search-input-group red-text-2">
+                            <input type="text" id="searchInput" class="search-input red-text-2"
+                                   placeholder="输入域名、公司或描述关键词...">
+                            <button type="submit" class="search-button red-text-1">
+                                <span>搜索</span>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div id="searchResults" style="margin-top: 20px;">
+                        <!-- 搜索结果将在这里显示 -->
+                    </div>
+                </div>
+            </section>
+            
+            <!-- 详情页面 -->
+            <section id="detailSection" class="content-section">
+                <div class="detail-view">
+                    <div id="detailContainer"></div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- 页脚 -->
+        <footer class="footer">
+            <p class="red-text-4">终焉备案系统 | 双相模式 | 点击切换黑白</p>
+            
+        </footer>
+    </div>
+    
+    <!-- 音频元素 -->
+    <audio id="bgMusic" loop>
+        <!-- 我们将通过JavaScript生成音频 -->
+    </audio>
+    
+    <script src="app.js"></script>
+    <!-- 终焉备案 -->
+    <span>终焉备案: <a href="https://yingo-server.github.io/ICP-yingo/20260125-172251-213.html" target="_blank" style="color: #f00; text-decoration: none;">终ICP备15C4383A号</a></span>
+    <span style="opacity: 0.7;">akams.com</span>
+</body>
+</html>
