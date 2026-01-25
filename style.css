@@ -1,0 +1,725 @@
+/* 终焉备案 - 双相风格 (优化版) */
+@font-face {
+    font-family: 'PMZD';
+    src: url('pmzd.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root {
+    --phase-black: #000000;
+    --phase-white: #ffffff;
+    --phase-red-1: #ff0000;
+    --phase-red-2: #cc0000;
+    --phase-red-3: #990000;
+    --phase-red-4: #660000;
+    --phase-red-5: #330000;
+    --phase-gray: #1a1a1a;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+    height: 100%;
+    overflow: auto;
+}
+
+body {
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-weight: normal;
+    line-height: 1.3;
+    cursor: crosshair;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    letter-spacing: 0.8px;
+}
+
+/* 字体间距调整 */
+h1, h2, h3, h4, h5, h6 {
+    letter-spacing: 1.2px;
+    line-height: 1.4;
+}
+
+p, span, div {
+    line-height: 1.5;
+}
+
+/* 双相状态 - 优化白色背景下的红色文字 */
+body.phase-white {
+    background-color: var(--phase-white) !important;
+    color: #000000 !important;
+}
+
+body.phase-black {
+    background-color: var(--phase-black) !important;
+    color: var(--phase-white) !important;
+}
+
+/* 白色背景下的红色文字增强 */
+body.phase-white .red-text-1 { color: #ff0000 !important; filter: none !important; }
+body.phase-white .red-text-2 { color: #cc0000 !important; filter: none !important; }
+body.phase-white .red-text-3 { color: #990000 !important; filter: none !important; }
+body.phase-white .red-text-4 { color: #660000 !important; filter: none !important; }
+body.phase-white .red-text-5 { color: #330000 !important; filter: none !important; }
+
+/* 黑色背景下的红色文字 */
+body.phase-black .red-text-1 { color: #ff0000; }
+body.phase-black .red-text-2 { color: #cc0000; }
+body.phase-black .red-text-3 { color: #990000; }
+body.phase-black .red-text-4 { color: #660000; }
+body.phase-black .red-text-5 { color: #330000; }
+
+/* 确保容器可滚动 */
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative;
+    z-index: 100;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: visible;
+}
+
+.content {
+    flex: 1;
+    position: relative;
+    overflow: visible;
+}
+
+/* 字体边界调整 */
+.header h1 {
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+.nav-button {
+    padding: 12px 15px;
+    margin: 5px 0;
+}
+
+.form-input {
+    padding: 10px 12px;
+    line-height: 1.4;
+}
+
+/* 扫描线效果 */
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        transparent 50%,
+        rgba(0, 0, 0, 0.1) 50%
+    );
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.3;
+}
+
+/* 噪点效果 */
+.noise {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9997;
+    mix-blend-mode: overlay;
+}
+
+/* 抖动动画 */
+@keyframes text-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-1px); }
+    20%, 40%, 60%, 80% { transform: translateX(1px); }
+}
+
+.shake {
+    animation: text-shake 0.5s;
+    display: inline-block;
+}
+
+/* 相位切换动画 */
+@keyframes phase-switch {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.phase-switching {
+    animation: phase-switch 0.3s ease;
+}
+
+/* 头部 */
+.header {
+    padding: 40px 0 20px;
+    border-bottom: 1px solid currentColor;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.header h1 {
+    font-size: 3.5rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    position: relative;
+    line-height: 1.3;
+    padding-bottom: 15px;
+}
+
+.header h1::after {
+    content: '》';
+    position: absolute;
+    right: -30px;
+    animation: cursor-blink 1s infinite;
+}
+
+@keyframes cursor-blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.4;
+}
+
+/* 导航 */
+.nav {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin: 30px 0;
+    position: relative;
+}
+
+.nav::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid currentColor;
+    pointer-events: none;
+}
+
+.nav-button {
+    background: transparent;
+    border: none;
+    padding: 15px;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.nav-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: currentColor;
+    opacity: 0.1;
+    transition: left 0.3s;
+}
+
+.nav-button:hover::before {
+    left: 0;
+}
+
+.nav-button.active {
+    background: currentColor;
+}
+
+/* 内容区域 */
+.content-section {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.content-section.active {
+    display: block;
+    opacity: 1;
+}
+
+/* 表单样式 */
+.form-container {
+    position: relative;
+    padding: 20px 0;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid currentColor;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 1rem;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.form-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px currentColor;
+}
+
+textarea.form-input {
+    min-height: 120px;
+    resize: vertical;
+}
+
+select.form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='currentColor' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 12px;
+    background: currentColor;
+    border: none;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: crosshair;
+    position: relative;
+    overflow: hidden;
+    line-height: 1.4;
+}
+
+.submit-button span {
+    position: relative;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.submit-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--phase-white);
+    transition: left 0.3s;
+}
+
+body.phase-black .submit-button::before {
+    background: var(--phase-black);
+}
+
+.submit-button:hover span {
+    color: var(--phase-red-1);
+}
+
+.submit-button:hover::before {
+    left: 0;
+}
+
+/* 搜索结果 */
+.search-container {
+    position: relative;
+}
+
+.search-input-group {
+    display: flex;
+    margin-bottom: 20px;
+    border: 1px solid currentColor;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px;
+    background: transparent;
+    border: none;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.search-input:focus {
+    outline: none;
+}
+
+.search-button {
+    padding: 0 20px;
+    background: currentColor;
+    border: none;
+    font-family: 'PMZD', 'Courier New', monospace;
+    cursor: crosshair;
+    position: relative;
+    overflow: hidden;
+}
+
+.search-button span {
+    position: relative;
+    z-index: 2;
+    transition: color 0.2s;
+}
+
+.search-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--phase-white);
+    transition: left 0.3s;
+}
+
+body.phase-black .search-button::before {
+    background: var(--phase-black);
+}
+
+.search-button:hover span {
+    color: var(--phase-red-1);
+}
+
+.search-button:hover::before {
+    left: 0;
+}
+
+.results-list {
+    border: 1px solid currentColor;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.result-item {
+    padding: 12px;
+    border-bottom: 1px solid currentColor;
+    cursor: crosshair;
+    transition: all 0.2s;
+    position: relative;
+    line-height: 1.4;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item:hover {
+    background: currentColor;
+}
+
+.result-title {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    transition: color 0.2s;
+    line-height: 1.4;
+}
+
+.result-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+.result-meta span {
+    transition: color 0.2s;
+}
+
+/* 详情视图 */
+.detail-view {
+    position: relative;
+}
+
+.detail-header {
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid currentColor;
+}
+
+.detail-title {
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    padding: 12px;
+    border: 1px solid currentColor;
+    line-height: 1.4;
+}
+
+.detail-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.detail-value {
+    font-size: 1rem;
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.back-button {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid currentColor;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 0.9rem;
+    cursor: crosshair;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.back-button:hover {
+    background: currentColor;
+}
+
+/* 消息提示 */
+.message {
+    padding: 12px;
+    margin-bottom: 20px;
+    border-left: 3px solid;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.message.error {
+    border-left-color: var(--phase-red-1);
+    background: rgba(255, 0, 0, 0.05);
+}
+
+.message.success {
+    border-left-color: var(--phase-red-3);
+    background: rgba(153, 0, 0, 0.05);
+}
+
+/* 代码展示 */
+.code-block {
+    padding: 12px;
+    border: 1px solid currentColor;
+    margin: 20px 0;
+    position: relative;
+    background: rgba(255, 0, 0, 0.02);
+    line-height: 1.4;
+}
+
+.code-block pre {
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+.copy-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 5px 10px;
+    background: transparent;
+    border: 1px solid currentColor;
+    font-family: 'PMZD', 'Courier New', monospace;
+    font-size: 0.7rem;
+    cursor: crosshair;
+    opacity: 0;
+    transition: all 0.2s;
+    line-height: 1.4;
+}
+
+.code-block:hover .copy-button {
+    opacity: 1;
+}
+
+.copy-button:hover {
+    background: currentColor;
+}
+
+/* 页脚 */
+.footer {
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid currentColor;
+    text-align: center;
+    font-size: 0.7rem;
+    opacity: 0.7;
+    line-height: 1.4;
+}
+
+/* 音频控制 */
+.audio-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.music-toggle {
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    cursor: crosshair;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.music-toggle:hover {
+    background: currentColor;
+}
+
+/* 状态指示器 */
+.status-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    line-height: 1.4;
+}
+
+/* 点击提示 */
+.click-hint {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.5;
+    animation: pulse 2s infinite;
+    line-height: 1.4;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.7; }
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .header h1 {
+        font-size: 2.5rem;
+        line-height: 1.3;
+        padding: 5px 0;
+    }
+    
+    .nav {
+        grid-template-columns: 1fr;
+    }
+    
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .click-hint,
+    .status-indicator {
+        display: none;
+    }
+    
+    /* 确保移动端可滚动 */
+    body {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* 移动端字体大小调整 */
+    .nav-button {
+        padding: 10px;
+        font-size: 0.8rem;
+    }
+    
+    .form-input,
+    .search-input {
+        padding: 8px;
+        font-size: 0.9rem;
+    }
+}
+
+/* 错误状态 */
+.error {
+    animation: error-shake 0.5s;
+}
+
+@keyframes error-shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+/* 字体加载备用方案 */
+.font-loading {
+    font-family: 'Courier New', monospace;
+}
+
+.font-loaded {
+    font-family: 'PMZD', 'Courier New', monospace;
+}
