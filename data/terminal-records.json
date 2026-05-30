@@ -1,12 +1,12 @@
 [
   {
     "domain": "yingo.netlify.app",
-    "purpose": "ä¸ªäººç½ç«",
-    "company": "K.L. å®éªå®¤ (Khaos Lab)",
+    "purpose": "Ã¤Â¸ÂªÃ¤ÂºÂºÃ§Â½ÂÃ§Â«Â",
+    "company": "K.L. Ã¥Â®ÂÃ©ÂªÂÃ¥Â®Â¤ (Khaos Lab)",
     "contact": "18674211622@163.com",
     "description": null,
-    "icpNumber": "ç»ICPå¤01BAB6A2å·",
-    "date": "2026/1/25ä¸å7:32:15",
+    "icpNumber": "Ã§Â»ÂICPÃ¥Â¤Â01BAB6A2Ã¥ÂÂ·",
+    "date": "2026/1/25Ã¤Â¸ÂÃ¥ÂÂ7:32:15",
     "timestamp": "20260125-193214-226",
     "url": "https://yingo-server.github.io/ICP-yingo/data/20260125-193214-226.html",
     "filename": "20260125-193214-226.html",
@@ -14,15 +14,28 @@
   },
   {
     "domain": "zhengchenxu.netlify.app",
-    "purpose": "个人网站",
-    "company": "郑",
+    "purpose": "ä¸ªäººç½ç«",
+    "company": "é",
     "contact": null,
-    "description": "郑的个人博客系统",
-    "icpNumber": "终ICP备AE9EC1DC号",
-    "date": "2026/2/8下午6:04:43",
+    "description": "éçä¸ªäººåå®¢ç³»ç»",
+    "icpNumber": "ç»ICPå¤AE9EC1DCå·",
+    "date": "2026/2/8ä¸å6:04:43",
     "timestamp": "20260208-180441-817",
     "url": "https://yingo-server.github.io/ICP-yingo/data/20260208-180441-817.html",
     "filename": "20260208-180441-817.html",
+    "dataFolder": "data"
+  },
+  {
+    "domain": "baidu.com",
+    "purpose": "企业官网",
+    "company": "baidu",
+    "contact": "n",
+    "description": "n",
+    "icpNumber": "终ICP备87179733号",
+    "date": "2026/5/30 18:16:43",
+    "timestamp": "20260530-181642-016",
+    "url": "https://yingo-server.github.io/ICP-yingo/data/20260530-181642-016.html",
+    "filename": "20260530-181642-016.html",
     "dataFolder": "data"
   }
 ]
